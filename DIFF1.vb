@@ -5,8 +5,8 @@ Sub DIFF1()
     Application.Calculation = xlCalculationManual
     Dim i2 As Long
     Dim i1 As Long
-    i1 = 27
-    For i2 = 34 To 69449
+    i1 = 5
+    For i2 = 5 To 69448
         Application.StatusBar = i2
         i1 = findRow(i1, i2)
         DoEvents
@@ -27,14 +27,20 @@ Function findRow(lastProgress As Long, i2 As Long)
     i1 = lastProgress
     key = Sheet2.Cells(i2, 1)
     Do While i1 < 68198 And found = False
-        tmp = findKey(key, i1) 'Etsitään avainta
+        tmp = findKey(key, i1, lastProgress) 'Etsitään avainta
         If tmp <> 0 Then 'Avain löytyi
             If count = 0 Then lastProgress = tmp
             count = count + 1
             keyFound = True
             i1 = tmp
             found = checkRow(i1, i2, count)
-             If found = False Then i1 = i1 + 1 'Avain lÃ¶ytyi, mutta ei riviÃ¤ -> jatketaan etsimistÃ¤
+             If found = False Then
+                If i1 < lastProgress Then
+                    i1 = i1 - 1
+                Else
+                    i1 = i1 + 1 'Avain lÃ¶ytyi, mutta ei riviÃ¤ -> jatketaan etsimistÃ¤
+                End If
+            End If
         End If
         If tmp = 0 Then Exit Do 'Avainta ei lÃ¶ydy -> poistutaan
     Loop
@@ -50,18 +56,30 @@ Function findRow(lastProgress As Long, i2 As Long)
     End If
 End Function
 
-Function findKey(key2 As String, i1 As Long) As Long
+Function findKey(key2 As String, i1 As Long, lastProgress As Long) As Long
     Dim ind1 As Long
     ind1 = i1
     Dim key1 As String
-    Do While ind1 < 69448
+    If ind1 >= lastProgress Then
+        Do While ind1 < 68198
+            key1 = Sheet1.Cells(ind1, 1).Value
+            If key1 = key2 Then
+                findKey = ind1
+                Exit Function
+            End If
+            If StrComp(key1, key2, vbTextCompare) = 1 Then Exit Do
+            ind1 = ind1 + 1
+        Loop
+        ind1 = lastProgress - 1
+    End If
+    Do While ind1 > 4
         key1 = Sheet1.Cells(ind1, 1).Value
         If key1 = key2 Then
             findKey = ind1
-            Exit Do
+            Exit Function
         End If
-        If StrComp(key1, key2, vbTextCompare) = 1 Then Exit Do
-        ind1 = ind1 + 1
+        If StrComp(key1, key2, vbTextCompare) = -1 Then Exit Do
+        ind1 = ind1 - 1
     Loop
 End Function
 
