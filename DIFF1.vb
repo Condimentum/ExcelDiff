@@ -25,9 +25,8 @@ Function findRow(lastProgress As Long, i2 As Long)
     Dim count As Integer
     Dim key As String
     i1 = lastProgress
-    key = Sheet2.Cells(i2, 1)
     Do While i1 < 68198 And found = False
-        tmp = findKey(key, i1, lastProgress) 'Etsitään avainta
+        tmp = findKey(i2, i1, lastProgress) 'Etsitään avainta
         If tmp <> 0 Then 'Avain löytyi
             If count = 0 Then lastProgress = tmp
             count = count + 1
@@ -56,10 +55,15 @@ Function findRow(lastProgress As Long, i2 As Long)
     End If
 End Function
 
-Function findKey(key2 As String, i1 As Long, lastProgress As Long) As Long
+Function findKey(i2 As Long, i1 As Long, lastProgress As Long) As Long
     Dim ind1 As Long
     ind1 = i1
     Dim key1 As String
+    Dim key2 As String
+    key2 = Sheet2.Cells(i2, 1).Value
+    Do While StrComp(Sheet1.Cells(ind1, 2).Value, Sheet2.Cells(i2, 2).Value) = -1
+        ind1 = ind1 + 1
+    Loop
     If ind1 >= lastProgress Then
         Do While ind1 < 68198
             key1 = Sheet1.Cells(ind1, 1).Value
@@ -67,7 +71,9 @@ Function findKey(key2 As String, i1 As Long, lastProgress As Long) As Long
                 findKey = ind1
                 Exit Function
             End If
-            If StrComp(key1, key2, vbTextCompare) = 1 Then Exit Do
+            If StrComp(key1, key2, vbTextCompare) = 1 Or StrComp(Sheet1.Cells(ind1, 2).Value, Sheet2.Cells(i2, 2).Value) = 1 Then
+                Exit Do
+            End If
             ind1 = ind1 + 1
         Loop
         ind1 = lastProgress - 1
@@ -78,7 +84,9 @@ Function findKey(key2 As String, i1 As Long, lastProgress As Long) As Long
             findKey = ind1
             Exit Function
         End If
-        If StrComp(key1, key2, vbTextCompare) = -1 Then Exit Do
+        If StrComp(key1, key2, vbTextCompare) = -1 Or StrComp(Sheet1.Cells(ind1, 2).Value, Sheet2.Cells(i2, 2).Value) = -1 Then
+            Exit Do
+        End If
         ind1 = ind1 - 1
     Loop
 End Function
@@ -102,7 +110,7 @@ End Sub
 Sub fillRow(i2 As Long)
     range2 = "A" + CStr(i2) + ":V" + CStr(i2)
             Sheet2.range(range2).Cells.Interior.ColorIndex = 44
-            Sheet2.Cells(i2, 23).Value = "<-"
+            Sheet2.Cells(i2, 23).Value = "<- Puuttuu"
 End Sub
 
 Sub checkCells(i1 As Long, i2 As Long)
@@ -110,14 +118,14 @@ Sub checkCells(i1 As Long, i2 As Long)
     range2 = "A" + CStr(i2)
     If Sheet1.Cells(i1, 1).Value <> Sheet2.Cells(i2, 1).Value Then
         Sheet2.range(range2).Cells.Interior.ColorIndex = 3
-    Else
-        Sheet2.range(range2).Cells.Interior.ColorIndex = xlNone
+'    Else
+'        Sheet2.range(range2).Cells.Interior.ColorIndex = xlNone
     End If
     range2 = "B" + CStr(i2)
     If Sheet1.Cells(i1, 2).Value <> Sheet2.Cells(i2, 2).Value Then
         Sheet2.range(range2).Cells.Interior.ColorIndex = 3
-    Else
-        Sheet2.range(range2).Cells.Interior.ColorIndex = xlNone
+'    Else
+'        Sheet2.range(range2).Cells.Interior.ColorIndex = xlNone
     End If
 '    range2 = "C" + CStr(i2)
 '    If Sheet1.Cells(i1, 3).Value <> Sheet2.Cells(i2, 3).Value Then
@@ -128,8 +136,8 @@ Sub checkCells(i1 As Long, i2 As Long)
     range2 = "D" + CStr(i2)
     If Sheet1.Cells(i1, 4).Value <> Sheet2.Cells(i2, 4).Value Then
         Sheet2.range(range2).Cells.Interior.ColorIndex = 3
-    Else
-        Sheet2.range(range2).Cells.Interior.ColorIndex = xlNone
+'    Else
+'        Sheet2.range(range2).Cells.Interior.ColorIndex = xlNone
     End If
 '    range2 = "E" + CStr(i2)
 '    If Sheet1.Cells(i1, 5).Value <> Sheet2.Cells(i2, 5).Value Then
@@ -146,8 +154,8 @@ Sub checkCells(i1 As Long, i2 As Long)
     range2 = "G" + CStr(i2)
     If Sheet1.Cells(i1, 7).Value <> Sheet2.Cells(i2, 7).Value Then
         Sheet2.range(range2).Cells.Interior.ColorIndex = 3
-    Else
-        Sheet2.range(range2).Cells.Interior.ColorIndex = xlNone
+'    Else
+'       Sheet2.range(range2).Cells.Interior.ColorIndex = xlNone
     End If
 '    range2 = "H" + CStr(i2)
 '    If Sheet1.Cells(i1, 8).Value <> Sheet2.Cells(i2, 8).Value Then
@@ -182,14 +190,14 @@ Sub checkCells(i1 As Long, i2 As Long)
     range2 = "M" + CStr(i2)
     If Sheet1.Cells(i1, 13).Value <> Sheet2.Cells(i2, 13).Value Then
         Sheet2.range(range2).Cells.Interior.ColorIndex = 3
-    Else
-        Sheet2.range(range2).Cells.Interior.ColorIndex = xlNone
+'    Else
+'        Sheet2.range(range2).Cells.Interior.ColorIndex = xlNone
     End If
     range2 = "N" + CStr(i2)
     If Sheet1.Cells(i1, 14).Value <> Sheet2.Cells(i2, 14).Value Then
         Sheet2.range(range2).Cells.Interior.ColorIndex = 3
-    Else
-        Sheet2.range(range2).Cells.Interior.ColorIndex = xlNone
+'    Else
+'        Sheet2.range(range2).Cells.Interior.ColorIndex = xlNone
     End If
 '    range2 = "O" + CStr(i2)
 '    If Sheet1.Cells(i1, 15).Value <> Sheet2.Cells(i2, 15).Value Then
@@ -239,7 +247,5 @@ Sub checkCells(i1 As Long, i2 As Long)
 '    Else
 '        Sheet2.range(range2).Cells.Interior.ColorIndex = xlNone
 '    End If
-    Sheet2.Cells(i2, 23).Value = "<-"
+    Sheet2.Cells(i2, 23).Value = "<- Muutoksia"
 End Sub
-
-
