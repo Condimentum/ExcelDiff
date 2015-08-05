@@ -25,7 +25,7 @@ Function findRow(lastProgress As Long, i1 As Long)
     Dim count As Integer
     Dim key As String
     i2 = lastProgress
-    Do While i2 < 69449 And found = False
+    Do While i2 < 60084 And found = False
         tmp = findKey(i1, i2, lastProgress) 'EtsitÃ¤Ã¤n avainta
         If tmp <> 0 Then 'Avain lÃ¶ytyi
             If count = 0 Then lastProgress = tmp
@@ -61,11 +61,11 @@ Function findKey(i1 As Long, i2 As Long, lastProgress As Long) As Long
     Dim ke1 As String
     Dim key2 As String
     key1 = Sheet1.Cells(i1, 1).Value
-    Do While StrComp(Sheet2.Cells(ind2, 2).Value, Sheet1.Cells(i1, 2).Value) = -1
-        ind2 = ind2 + 1
-    Loop
     If ind2 >= lastProgress Then
-        Do While ind2 < 69449
+        Do While StrComp(Sheet2.Cells(ind2, 2).Value, Sheet1.Cells(i1, 2).Value) = -1
+            ind2 = ind2 + 1
+        Loop
+        Do While ind2 < 60084
             key2 = Sheet2.Cells(ind2, 1).Value
             If key2 = key1 Then
                 findKey = ind2
@@ -103,13 +103,13 @@ End Function
 Sub clearRow(i1 As Long)
     Dim range1 As String
     range1 = "A" + CStr(i1) + ":V" + CStr(i1)
-    Sheet1.range(range1).Cells.Interior.ColorIndex = xlNone
+    Sheet1.Range(range1).Cells.Interior.ColorIndex = xlNone
     Sheet1.Cells(i1, 23).Value = ""
 End Sub
 
 Sub fillRow(i1 As Long)
     range1 = "A" + CStr(i1) + ":V" + CStr(i1)
-            Sheet1.range(range1).Cells.Interior.ColorIndex = 44
+            Sheet1.Range(range1).Cells.Interior.ColorIndex = 44
             Sheet1.Cells(i1, 23).Value = "<- Puuttuu"
 End Sub
 
@@ -117,13 +117,13 @@ Sub checkCells(i1 As Long, i2 As Long)
     Dim range1 As String
     range1 = "A" + CStr(i1)
     If Sheet1.Cells(i1, 1).Value <> Sheet2.Cells(i2, 1).Value Then
-        Sheet1.range(range1).Cells.Interior.ColorIndex = 3
+        Sheet1.Range(range1).Cells.Interior.ColorIndex = 3
 '    Else
 '        Sheet1.range(range1).Cells.Interior.ColorIndex = xlNone
     End If
     range1 = "B" + CStr(i1)
     If Sheet1.Cells(i1, 2).Value <> Sheet2.Cells(i2, 2).Value Then
-        Sheet1.range(range1).Cells.Interior.ColorIndex = 3
+        Sheet1.Range(range1).Cells.Interior.ColorIndex = 3
 '    Else
 '        Sheet1.range(range1).Cells.Interior.ColorIndex = xlNone
     End If
@@ -135,7 +135,7 @@ Sub checkCells(i1 As Long, i2 As Long)
 '    End If
     range1 = "D" + CStr(i1)
     If Sheet1.Cells(i1, 4).Value <> Sheet2.Cells(i2, 4).Value Then
-        Sheet1.range(range1).Cells.Interior.ColorIndex = 3
+        Sheet1.Range(range1).Cells.Interior.ColorIndex = 3
 '    Else
 '        Sheet1.range(range1).Cells.Interior.ColorIndex = xlNone
     End If
@@ -153,7 +153,7 @@ Sub checkCells(i1 As Long, i2 As Long)
 '    End If
     range1 = "G" + CStr(i1)
     If Sheet1.Cells(i1, 7).Value <> Sheet2.Cells(i2, 7).Value Then
-        Sheet1.range(range1).Cells.Interior.ColorIndex = 3
+        Sheet1.Range(range1).Cells.Interior.ColorIndex = 3
 '    Else
 '        Sheet1.range(range1).Cells.Interior.ColorIndex = xlNone
     End If
@@ -189,13 +189,13 @@ Sub checkCells(i1 As Long, i2 As Long)
 '    End If
     range1 = "M" + CStr(i1)
     If Sheet1.Cells(i1, 13).Value <> Sheet2.Cells(i2, 13).Value Then
-        Sheet1.range(range1).Cells.Interior.ColorIndex = 3
+        Sheet1.Range(range1).Cells.Interior.ColorIndex = 3
 '    Else
 '        Sheet1.range(range1).Cells.Interior.ColorIndex = xlNone
     End If
     range1 = "N" + CStr(i1)
     If Sheet1.Cells(i1, 14).Value <> Sheet2.Cells(i2, 14).Value Then
-        Sheet1.range(range1).Cells.Interior.ColorIndex = 3
+        Sheet1.Range(range1).Cells.Interior.ColorIndex = 3
 '    Else
 '        Sheet1.range(range1).Cells.Interior.ColorIndex = xlNone
     End If
